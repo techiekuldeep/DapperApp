@@ -52,7 +52,10 @@ namespace DapperApp.Repository
 
         public Company Update(Company company)
         {
-            return null;
+            var sql = "UPDATE Companies SET Name = @Name, Address = @Address, City = @City, " +
+                "State = @State, PostalCode = @PostalCode WHERE CompanyId = @CompanyId";
+            db.Execute(sql, company);
+            return company;
         }
     }
 }
