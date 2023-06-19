@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace DapperApp.Models
 {
+    [Dapper.Contrib.Extensions.Table("Companies")]
     public class Company
     {
         [Key]
