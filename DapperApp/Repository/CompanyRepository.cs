@@ -24,8 +24,12 @@ namespace DapperApp.Repository
         }
         public Company Add(Company company)
         {
-            
-           
+            var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode);"
+                        + "SELECT CAST(SCOPE_IDENTITY() as int); ";
+            var id = db.Query<int>(sql, company).Single();
+            company.CompanyId = id;
+            return company;
+
         }
 
         public Company Find(int id)
@@ -48,7 +52,7 @@ namespace DapperApp.Repository
 
         public Company Update(Company company)
         {
-            
+            return null;
         }
     }
 }
