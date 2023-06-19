@@ -22,21 +22,19 @@ namespace DapperApp.Controllers
             _compRepo = compRepo;
             _empRepo = empRepo;
         }
-        // GET: Companies
+        
         public async Task<IActionResult> Index()
         {
             return View(_empRepo.GetAll());
         }
 
-        // GET: Companies/Create
+        
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Companies/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ActionName("Create")]
@@ -50,7 +48,7 @@ namespace DapperApp.Controllers
             return View(Employee);
         }
 
-        // GET: Companies/Edit/5
+   
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -66,9 +64,7 @@ namespace DapperApp.Controllers
             return View(Employee);
         }
 
-        // POST: Companies/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+    
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id)
@@ -86,7 +82,7 @@ namespace DapperApp.Controllers
             return View(Employee);
         }
 
-        // GET: Companies/Delete/5
+        
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
