@@ -47,7 +47,8 @@ namespace DapperApp.Repository
 
         public void Remove(int id)
         {
-           
+            var sql = "DELETE FROM Companies WHERE CompanyId = @Id";
+            db.Execute(sql, new { id });
         }
 
         public Company Update(Company company)
