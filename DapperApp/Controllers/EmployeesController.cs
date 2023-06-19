@@ -23,9 +23,16 @@ namespace DapperApp.Controllers
             _empRepo = empRepo;
         }
         
+        //Index method with N+1
         public async Task<IActionResult> Index()
         {
-            return View(_empRepo.GetAll());
+            List<Employee> employees = _empRepo.GetAll();
+            foreach (Employee obj in employees)
+            {
+                obj.Company = _compRepo.Find(obj.CompanyId);
+            }
+
+            return View(employees);
         }
 
         
