@@ -7,22 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DapperApp.Data;
 using DapperApp.Models;
-using DapperApp.Repository;
 
 namespace DapperApp.Controllers
 {
-    public class CompaniesController : Controller
+    public class CompaniesControllerOldWithEF : Controller
     {
-        private readonly ICompanyRepository _compRepo;
-        public CompaniesController(ICompanyRepository compRepo)
+        private readonly ApplicationDbContext _context;
+        public CompaniesControllerOldWithEF(ApplicationDbContext context)
         {
-            _compRepo = compRepo;
+            _context = context;
         }
 
         // GET: Companies
         public async Task<IActionResult> Index()
         {
-            return View(_compRepo.GetAll());
+            return View(await _context.Companies.ToListAsync());
         }
 
         // GET: Companies/Details/5
@@ -33,7 +32,8 @@ namespace DapperApp.Controllers
                 return NotFound();
             }
 
-            var company = _compRepo.Find(id.GetValueOrDefault());
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(m => m.CompanyId == id);
             if (company == null)
             {
                 return NotFound();
@@ -57,7 +57,8 @@ namespace DapperApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _compRepo.Add(company);
+                _context.Add(company);
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
@@ -71,7 +72,7 @@ namespace DapperApp.Controllers
                 return NotFound();
             }
 
-            var company = _compRepo.Find(id.GetValueOrDefault());
+            var company = await _context.Companies.FindAsync(id);
             if (company == null)
             {
                 return NotFound();
@@ -93,7 +94,22 @@ namespace DapperApp.Controllers
 
             if (ModelState.IsValid)
             {
-                _compRepo.Update(company);
+                try
+                {
+                    _context.Update(company);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CompanyExists(company.CompanyId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(company);
@@ -107,8 +123,30 @@ namespace DapperApp.Controllers
                 return NotFound();
             }
 
-            _compRepo.Remove(id.GetValueOrDefault());
+            var company = await _context.Companies
+                .FirstOrDefaultAsync(m => m.CompanyId == id);
+            if (company == null)
+            {
+                return NotFound();
+            }
+
+            return View(company);
+        }
+
+        // POST: Companies/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var company = await _context.Companies.FindAsync(id);
+            _context.Companies.Remove(company);
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-        }  
+        }
+
+        private bool CompanyExists(int id)
+        {
+            return _context.Companies.Any(e => e.CompanyId == id);
+        }
     }
 }
