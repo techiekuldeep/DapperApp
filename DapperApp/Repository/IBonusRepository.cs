@@ -9,6 +9,6 @@ namespace DapperApp.Repository
 {
     public interface IBonusRepository
     {
-        List<Employee> GetEmployeeWithCompany();
+        List<Employee> GetEmployeeWithCompany(int id);
     }
 }

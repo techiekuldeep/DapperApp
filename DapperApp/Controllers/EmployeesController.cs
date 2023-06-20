@@ -37,9 +37,9 @@ namespace DapperApp.Controllers
         //}
 
         //Index method with N+1 call resolution using Bonus repository
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int companyId = 0)
         {
-            List<Employee> employees = _bonusRepo.GetEmployeeWithCompany();
+            List<Employee> employees = _bonusRepo.GetEmployeeWithCompany(companyId);
             return View(employees);
         }
 
