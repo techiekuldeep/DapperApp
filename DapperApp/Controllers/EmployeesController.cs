@@ -15,27 +15,35 @@ namespace DapperApp.Controllers
     {
         private readonly ICompanyRepository _compRepo;
         private readonly IEmployeeRepository _empRepo;
+        private readonly IBonusRepository _bonusRepo;
         [BindProperty]
         public Employee Employee { get; set; }
-        public EmployeesController(ICompanyRepository compRepo, IEmployeeRepository empRepo)
+        public EmployeesController(ICompanyRepository compRepo, IEmployeeRepository empRepo, IBonusRepository bonusRepo)
         {
             _compRepo = compRepo;
+            _bonusRepo = bonusRepo;
             _empRepo = empRepo;
         }
-        
-        //Index method with N+1
+        //Index method with N+1 call
+        //public async Task<IActionResult> Index()
+        //{
+        //    List<Employee> employees = _empRepo.GetAll();
+        //    foreach (Employee obj in employees)
+        //    {
+        //        obj.Company = _compRepo.Find(obj.CompanyId);
+        //    }
+
+        //    return View(employees);
+        //}
+
+        //Index method with N+1 call resolution using Bonus repository
         public async Task<IActionResult> Index()
         {
-            List<Employee> employees = _empRepo.GetAll();
-            foreach (Employee obj in employees)
-            {
-                obj.Company = _compRepo.Find(obj.CompanyId);
-            }
-
+            List<Employee> employees = _bonusRepo.GetEmployeeWithCompany();
             return View(employees);
         }
 
-        
+
         public IActionResult Create()
         {
             IEnumerable<SelectListItem> companyList = _compRepo.GetAll().Select(i => new SelectListItem
