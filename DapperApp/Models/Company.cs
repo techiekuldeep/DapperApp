@@ -9,6 +9,10 @@ namespace DapperApp.Models
     [Dapper.Contrib.Extensions.Table("Companies")]
     public class Company
     {
+        public Company()
+        {
+            Employees = new List<Employee>();
+        }
         [Key]
         public int CompanyId { get; set; }
         public string Name { get; set; }
