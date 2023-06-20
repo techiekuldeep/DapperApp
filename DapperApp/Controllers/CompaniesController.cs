@@ -37,7 +37,7 @@ namespace DapperApp.Controllers
                 return NotFound();
             }
 
-            var company = _bonusRepo.GetCompanyWithAddresses(id.GetValueOrDefault());
+            var company = _bonusRepo.GetCompanyWithEmployees(id.GetValueOrDefault());
             if (company == null)
             {
                 return NotFound();
