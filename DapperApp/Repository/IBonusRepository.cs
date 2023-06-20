@@ -13,5 +13,6 @@ namespace DapperApp.Repository
         Company GetCompanyWithEmployees(int id);
 
         List<Company> GetAllCompanyWithEmployees();
+        void AddTestCompanyWithEmployees(Company objComp);
     }
 }
