@@ -31,8 +31,7 @@ namespace DapperApp.Controllers
 
         public IActionResult AddTestRecords()
         {
-            return View();
-
+           
             Company company = new Company()
             {
                 Name = "Test" + Guid.NewGuid().ToString(),
@@ -64,6 +63,8 @@ namespace DapperApp.Controllers
 
         public IActionResult RemoveTestRecords()
         {
+            int[] companyIdToRemove = _bonusRepo.FilterCompanyByName("Test").Select(i => i.CompanyId).ToArray();
+            _bonusRepo.RemoveRange(companyIdToRemove);
             return RedirectToAction(nameof(Index));
         }
 
